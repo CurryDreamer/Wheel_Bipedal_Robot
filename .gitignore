@@ -1,0 +1,12 @@
+# 1. 忽略所有内容
+*
+
+# 2. 但是保留我们需要的三个核心文件夹（及其中内容）
+!LQR_test/
+!robot_feedback_test/
+!robot_vmc_test/
+
+# 3. 确保忽略掉 Git 自身和隐藏文件夹（防止把环境配置也传上去）
+!.gitignore
+.git/
+.venv/
