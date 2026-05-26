@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="wheel_bipedal_robot_v1">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.002" iterations="50" tolerance="1e-10"/>
+  
+  <asset>
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 .2 .3" width="512" height="512" mark="none"/>
+    <material name="matplane" reflectance="0.2" texture="texplane" texrepeat="1 1" texuniform="true"/>
+  </asset>
+  <include file="obstacles.xml"/>
+  <worldbody>
+    <geom name="floor" pos="0 0 0" size="0 0 0.5" type="plane" material="matplane" condim="3"/>
+    <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+    <!-- 机器人启动时候的支撑块 -->
+    <!-- <body name="support_block" pos="0 0 0.06">
+      <geom type="box"  pos="0 0 0" size="0.2 0.03 0.06" rgba="1 1 1 0.2" />
+    </body> -->
+    <body name="torso" pos="0.0 0.0 0.25">
+      <freejoint />
+      <site name="imu"  type="box" pos="0 0 -0.02" size="0.005 0.005 0.005"/>
+      <geom name="torso_base" type="box" mass="0.823" pos="0 0 -0.03" size="0.068 0.0875 0.005" rgba="1 1 1 0.4" />
+      <geom name="torso_front" type="box" mass="0.824" pos="0.0 0.0825 0.005" size="0.068 0.005 0.03" rgba="1 1 1 0.4" />
+      <geom name="torso_back" type="box" mass="0.824" pos="0.0 -0.0825 0.005" size="0.068 0.005 0.03" rgba="1 1 1 0.4" />
+
+      <!-- ==================== 物理限位块（已打开碰撞，确保参与接触限制） ==================== -->
+      <body name="right_limit1" pos="0.0 -0.0915 0.015" quat="0.70710678 0.70710678 0.0 0.0">
+        <geom type="cylinder"  name="torso_right_limit1" mass="0.005" pos="0.0 0.0 0.005" size="0.01 0.01 0.01" rgba="1 1 1 0.4" group="0" condim="3"/>  
+      </body>
+      <body name="right_limit2" pos="0.0 -0.0915 -0.02" quat="0.70710678 0.70710678 0.0 0.0">
+        <geom type="box" name="torso_right_limit2" mass="0.005" pos="0.0 0.0 0.005" size="0.022 0.015 0.002" rgba="1 1 1 0.4" group="0" condim="3"/>  
+      </body>
+      <body name="left_limit1" pos="0.0 0.0915 0.015" quat="0.70710678 0.70710678 0.0 0.0">
+        <geom type="cylinder" name="torso_left_limit1" mass="0.005" pos="0.0 0.0 -0.005" size="0.01 0.01 0.01" rgba="1 1 1 0.4" group="0" condim="3"/>  
+      </body>
+      <body name="left_limit2" pos="0.0 0.0915 -0.02" quat="0.70710678 0.70710678 0.0 0.0">
+        <geom type="box" name="torso_left_limit2" mass="0.005" pos="0.0 0.0 0.003" size="0.022 0.015 0.002" rgba="1 1 1 0.4" group="0" condim="3"/>  
+      </body>
+
+      <!-- ==================== 右腿 1 ==================== -->
+      <body name="right_up_leg_1" pos="0.04 -0.0915 -0.01" quat="4.32978028e-17 -4.32978028e-17  7.07106781e-01 -7.07106781e-01">
+        <joint name="joint_right_phi1" pos="0 0 0" axis="0 0 1" damping="0.266" frictionloss="0.005" />
+        <geom type="box" mass="0.01914" pos="0.0 0.0375 0.0" size="0.0125 0.0375 0.004" rgba="1 0.752941 0.796078 1" />
+        
+        <body name="right_down_leg_1" pos="0.0 0.075 0.0"> 
+          <joint name="right_down_1" pos="0 0 0" axis="0 0 1" ref="0.5"/>
+          <geom type="box" mass="0.02314" pos="0.0 0.07 0.0" size="0.0125 0.07 0.004" rgba="1 1 1 1" />
+          <site name="right_down_connect_1" size="0.014" pos="0.0 0.14 0.0"/>
+
+          <body name="right_wheel" pos="0.0 0.14 0.03">
+            <joint name="right_wheel_torque" pos="0 0 0" axis="0 0 1" damping="0.0597" frictionloss="0.001" />
+            <geom name="right_wheel_geom" type="cylinder" mass="0.6" pos="0.0 0.0 0.0" size="0.06 0.02" rgba="1 0.752941 0.796078 0.7" />         
+          </body>
+        </body>
+      </body>
+
+      <!-- ==================== 右腿 2 ==================== -->
+      <body name="right_up_leg_2" pos="-0.04 -0.0915 -0.01" quat="4.32978028e-17 -4.32978028e-17  7.07106781e-01 -7.07106781e-01">
+        <joint name="joint_right_phi4" pos="0 0 0" axis="0 0 1" damping="0.266" frictionloss="0.005" />
+        <geom type="box" mass="0.02" pos="0.0 0.0375 0.0" size="0.0125 0.0375 0.004" rgba="1 0.752941 0.796078 1" />
+        
+        <body name="right_down_leg_2" pos="0.0 0.075 0.0"> 
+          <joint name="right_down_2" pos="0 0 0" axis="0 0 1"/>
+          <geom type="box" mass="0.02314" pos="0.0 0.07 0.0" size="0.0125 0.07 0.004" rgba="1 1 1 1" />
+          <site name="right_down_connect_2" size="0.014" pos="0.0 0.14 0.0"/>
+        </body>
+      </body>
+
+      <!-- ==================== 左腿 1 ==================== -->
+      <body name="left_up_leg_1" pos="0.04 0.0915 -0.01" quat="4.32978028e-17 -4.32978028e-17 -7.07106781e-01 -7.07106781e-01">
+        <joint name="joint_left_phi1" pos="0 0 0" axis="0 0 1" damping="0.266" frictionloss="0.005" />
+        <geom type="box" mass="0.01914" pos="0.0 -0.0375 0.0" size="0.0125 0.0375 0.004" rgba="1 0.752941 0.796078 1" />
+        
+        <body name="left_down_leg_1" pos="0.0 -0.075 0.0"> 
+          <joint name="left_down_1" pos="0 0 0" axis="0 0 1"/>
+          <geom type="box" mass="0.02314" pos="0.0 -0.07 0.0" size="0.0125 0.07 0.004" rgba="1 1 1 1" />
+          <site name="left_down_connect_1" size="0.014" pos="0.0 -0.14 0.0"/>
+          
+          <body name="left_wheel" pos="0.0 -0.14 0.03">
+            <joint name="left_wheel_torque" pos="0 0 0" axis="0 0 1" damping="0.0597" frictionloss="0.001" />
+            <geom name="left_wheel_geom" type="cylinder" mass="0.6" pos="0.0 0.0 0.0" size="0.06 0.02" rgba="1 0.752941 0.796078 0.7" />          
+          </body>
+        </body>
+      </body>
+
+      <!-- ==================== 左腿 2 ==================== -->
+      <body name="left_up_leg_2" pos="-0.04 0.0915 -0.01" quat="4.32978028e-17 -4.32978028e-17 -7.07106781e-01 -7.07106781e-01">
+        <joint name="joint_left_phi4" pos="0 0 0" axis="0 0 1" damping="0.266" frictionloss="0.005" />
+        <geom type="box" mass="0.02" pos="0.0 -0.0375 0.0" size="0.0125 0.0375 0.004" rgba="1 0.752941 0.796078 1" />
+        
+        <body name="left_down_leg_2" pos="0.0 -0.075 0.0"> 
+          <joint name="left_down_2" pos="0 0 0" axis="0 0 1"/>
+          <geom type="box" mass="0.02314" pos="0.0 -0.07 0.0" size="0.0125 0.07 0.004" rgba="1 1 1 1" />
+          <site name="left_down_connect_2" size="0.014" pos="0.0 -0.14 0.0"/>
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <equality>
+    <weld site1="right_down_connect_1" site2="right_down_connect_2" />
+    <weld site1="left_down_connect_1" site2="left_down_connect_2" />
+  </equality>
+
+  <contact>
+    <exclude body1="torso" body2="right_up_leg_1"/>
+    <exclude body1="torso" body2="left_up_leg_1"/>
+
+    <exclude body1="right_up_leg_1" body2="right_down_leg_2"/>
+    <exclude body1="left_up_leg_1" body2="left_down_leg_2"/>
+
+    <!-- 注意：此处保留原有关节屏蔽，但绝不屏蔽这四个 limit 刚体，使其物理限位生效 -->
+    <exclude body1="left_down_leg_1" body2="right_wheel"/>
+    <exclude body1="left_down_leg_2" body2="right_wheel"/>
+
+    <exclude body1="right_down_leg_1" body2="left_wheel"/>
+    <exclude body1="right_down_leg_2" body2="left_wheel"/>
+  </contact>
+
+  <actuator>
+    <!-- <position joint="joint_right_phi1" name="right_phi1" kp="10" ctrlrange="-6.28 6.28" />
+    <position joint="joint_right_phi4" name="right_phi4" kp="10" ctrlrange="-6.28 6.28" />
+    <position joint="joint_left_phi1"  name="left_phi1"  kp="10" ctrlrange="-6.28 6.28" />
+    <position joint="joint_left_phi4"  name="left_phi4"  kp="10" ctrlrange="-6.28 6.28" /> -->
+    <motor joint="joint_right_phi1" name="right_phi1" ctrlrange="-6.0 6.0" />
+    <motor joint="joint_right_phi4" name="right_phi4" ctrlrange="-6.0 6.0" />
+    <motor joint="joint_left_phi1"  name="left_phi1"  ctrlrange="-6.0 6.0" />
+    <motor joint="joint_left_phi4"  name="left_phi4"  ctrlrange="-6.0 6.0" />
+
+    <motor joint="right_wheel_torque"  name="right_torque"  ctrlrange="-2.0 2.0" />
+    <motor joint="left_wheel_torque"  name="left_torque"  ctrlrange="-2.0 2.0" />
+
+
+  </actuator>
+
+  <sensor>
+    <!-- 准备六个电机的编码器 + imu的四元数 角速度 加速度 -->
+    <jointpos name="right1_pos" joint="joint_right_phi1" />
+    <jointvel name="right1_vel" joint="joint_right_phi1" />
+    <jointpos name="right2_pos" joint="joint_right_phi4" />
+    <jointvel name="right2_vel" joint="joint_right_phi4" />
+    <jointpos name="rightwheel_pos" joint="right_wheel_torque" />
+    <jointvel name="rightwheel_vel" joint="right_wheel_torque" />
+
+    <jointpos name="left1_pos" joint="joint_left_phi1" />
+    <jointvel name="left1_vel" joint="joint_left_phi1" />
+    <jointpos name="left2_pos" joint="joint_left_phi4" />
+    <jointvel name="left2_vel" joint="joint_left_phi4" />
+    <jointpos name="leftwheel_pos" joint="left_wheel_torque" />
+    <jointvel name="leftwheel_vel" joint="left_wheel_torque" />
+
+    <framequat name="orientation" objtype="site" noise="0.001" objname="imu" />
+    <framepos name="position" objtype="site" noise="0.001" objname="imu" />
+
+    <gyro name="angular_vel" site="imu" noise="0.005" cutoff="34.9" />
+    <accelerometer name="linear_accel" site="imu" noise="0.005" cutoff="157" />
+    <velocimeter name="linear_vel" site="imu" noise="0.001" cutoff="30" />
+    <magnetometer name="magnetometer" site="imu" />
+  </sensor>
+</mujoco>
