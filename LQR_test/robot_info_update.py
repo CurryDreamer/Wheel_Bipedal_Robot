@@ -40,6 +40,8 @@ def robot_info_update(d):
     info['euler'] = {'roll': roll, 'pitch': pitch, 'yaw': yaw}
     
     # 3. 读取 y 轴陀螺仪 (Pitch 相对应的角速度)
+    info['gyro_yaw'] = d.sensor("angular_vel").data[0]
     info['gyro_pitch'] = d.sensor("angular_vel").data[1]
-    
+    info['gyro_roll'] = d.sensor("angular_vel").data[2]
+
     return info
