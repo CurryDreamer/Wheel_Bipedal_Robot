@@ -5,6 +5,7 @@
 !LQR_VMC/
 !robot_feedback_test/
 !robot_vmc_test/
+!README.md
 
 # 3. 强制包含这三个目录下的所有子文件
 !LQR_VMC/**
