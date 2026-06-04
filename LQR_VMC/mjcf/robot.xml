@@ -17,8 +17,6 @@
     </body> -->
     <body name="torso" pos="0.0 0.0 0.25">
       <freejoint />
-      <!-- 第一人称视角(FPV)相机: 位于机身前方(X轴正方向), 看向正前方, xyaxes="0 -1 0 0 0 1" 将相机-Z指向+X -->
-      <camera name="fpv_camera" pos="0.1 0.0 0.05" xyaxes="0 -1 0 0 0 1" fovy="75" />
       <site name="imu"  type="box" pos="0 0 -0.02" size="0.005 0.005 0.005"/>
       <geom name="torso_base" type="box" mass="0.823" pos="0 0 -0.03" size="0.068 0.0875 0.005" rgba="1 1 1 0.4" />
       <geom name="torso_front" type="box" mass="0.824" pos="0.0 0.0825 0.005" size="0.068 0.005 0.03" rgba="1 1 1 0.4" />

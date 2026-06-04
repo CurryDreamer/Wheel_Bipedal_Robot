@@ -13,6 +13,7 @@
     <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
 
     <body name="torso" pos="0.0 0.0 0.4" >
+    <!-- <body name="torso" pos="0.0 0.0 0.4" quat="1 0 0 0"> -->
       <!-- <freejoint /> -->
       <site name="imu"  type="box" pos="0 0 -0.02" size="0.005 0.005 0.005"/>
       <geom name="torso_base" type="box" mass="0.823" pos="0 0 -0.03" size="0.068 0.0875 0.005" rgba="1 1 1 0.4" />

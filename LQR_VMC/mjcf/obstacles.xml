@@ -1,0 +1,68 @@
+<mujoco model="adjustable_angle_ramp">
+    <asset>
+        <!-- 斜坡材质，方便看清 -->
+        <material name="ramp_mat" rgba="0.6 0.6 0.6 1" />
+    </asset>
+
+    <worldbody>
+        <!-- 
+            【调节核心】修改 euler 的第二个参数（即围绕 Y 轴旋转），就能改变斜坡角度
+            比如: "0 15 0" 代表坡度为 15 度，"0 30 0" 代表 30 度
+            pos 可以调整斜坡在主场景中的整体位置
+        -->
+        <body name="ramp_body1" pos="1.0 0 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="ramp_surface1" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+
+        <body name="ramp_body2" pos="2.0 0 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="ramp_surface2" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+
+        <body name="ramp_body3" pos="3.0 0 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="ramp_surface3" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+
+        <body name="ramp_body4" pos="4.0 0 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="ramp_surface4" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+
+        <body name="ramp_body5" pos="5.0 0 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="ramp_surface5" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+    </worldbody>
+</mujoco>

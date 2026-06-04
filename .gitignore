@@ -2,12 +2,12 @@
 *
 
 # 2. 强制包含三个核心目录本身（允许 Git 进入这些目录）
-!LQR_test/
+!LQR_VMC/
 !robot_feedback_test/
 !robot_vmc_test/
 
 # 3. 强制包含这三个目录下的所有子文件
-!LQR_test/**
+!LQR_VMC/**
 !robot_feedback_test/**
 !robot_vmc_test/**
 
