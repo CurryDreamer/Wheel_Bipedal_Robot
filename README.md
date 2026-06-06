@@ -21,7 +21,6 @@ wheel_bipedal_robot/
 │   │   └── xbox_controller.py      #     封装 PygameController 类（键盘 + Xbox 手柄）
 │   ├── robot_mujoco_sensor_feedback/  # 传感器反馈处理
 │   │   └── robot_info_update.py    #     统一读取 6 个关节 + IMU 数据
-│   ├── cal_lqr_k.m                 #   MATLAB LQR 整定与多项式拟合，生成 POLY_COEFFICIENT
 │   └── util/                       #   工具类
 │       └── climb_traj.py           #     线性速度爬坡滤波器
 │
@@ -34,6 +33,7 @@ wheel_bipedal_robot/
 │   ├── quat_euler_trans.py         #   四元数 ↔ 欧拉角转换测试
 │   └── robot.xml                   #   MuJoCo 模型文件
 │
+├── cal_lqr_k.m                 #   MATLAB LQR 整定与多项式拟合，生成 POLY_COEFFICIENT
 └── README.md
 ```
 
