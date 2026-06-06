@@ -1,6 +1,7 @@
 import mujoco
 import math
 import numpy as np
+import os
 '''
 提供以下计算
 机体质量
@@ -41,6 +42,8 @@ def calculate_robot_params(xml_path):
     calculated_torso_mass =  base_mass + front_mass + back_mass + limit_masses
     
     print(f"机体总质量计算结果:\n  理论累加值 = {calculated_torso_mass:.5f} kg\n  Mujoco 动力学计算值 = {torso_mass+limit_mass:.5f} kg")
+
+    params['torso_mass'] = torso_mass + limit_mass
 
     # 2. 驱动轮参数 (单个轮子)
     # 通过给 geom 命名来准确获取
@@ -86,6 +89,8 @@ def calculate_robot_params(xml_path):
     print(f"  全部 8 个连杆总质量 (m_p) = {pendulum_mass:.6f} kg")
     print(f"  等效摆杆的总质量 (m_p/2) = {pendulum_mass/2:.6f} kg")
 
+    params['pendulum_mass'] = pendulum_mass
+
     # 5. 质点偏移 (CoM Offset - IMU 到 Torso 的 Z 轴距离)
     # 提取 torso 和 imu 的相对位置。imu 在 xml 中是被绑定在 torso 内的 site
     imu_site_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, "imu")
@@ -95,6 +100,17 @@ def calculate_robot_params(xml_path):
     
     print(f"\n质点偏移 (CoM Offset):")
     print(f"  IMU 到机体中心 Z 轴绝对偏差距离 = {com_offset_z:.4f} m")
+
+    # ===== 将所有计算结果保存为 .npz 文件 =====
+    output_dir = os.path.join(os.path.dirname(__file__), "output")
+    os.makedirs(output_dir, exist_ok=True)
+
+    filepath = os.path.join(output_dir, "robot_params.npz")
+    np.savez(filepath, **params)
+    print(f"\n  [save] {filepath}")
+    print(f"  字段: {list(params.keys())}")
+
+    return params
 
 def calc_pendulum_inertia(mp, L0):
     """
