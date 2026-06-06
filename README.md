@@ -108,7 +108,7 @@ python param_cal/robot_param_cal.py
 | 驱动轮半径 | `wheel_radius` | 读取 `right_wheel_geom` 的 geom 尺寸第一分量（圆柱半径） | R = geom_size[right_wheel_geom][0] |
 | 驱动轮质量 | `wheel_mass` | 读取 `right_wheel` body 的动力学质量 | m_wheel = body_mass[right_wheel] |
 | 驱动轮转动惯量 | `wheel_inertia` | 按**实心圆柱绕中心轴旋转**模型 | I_zz = ½ · m_wheel · R² |
-| 机体转动惯量 | `torso_inertia` | MuJoCo 内部计算的 `torso` body 本体主轴惯量，返回 `[I_xx, I_yy, I_zz]` | [I_xx, I_yy, I_zz] = body_inertia[torso] |
+| 机体转动惯量 | `torso_inertia` | MuJoCo 内部计算的 `torso` body 本体主轴惯量，返回 `[I_xx, I_yy, I_zz]` | I_yy = body_inertia[torso] |
 | 摆杆质量 | `pendulum_mass` | 左右腿共 8 段连杆 body 质量求和 | m_p = Σ body_mass[leg_i] (i=1..8) |
 | 质点偏移 | `com_offset` | 取 IMU site 相对 torso body 坐标系 Z 轴偏移的绝对值 | δ_z = \|site_pos[imu][2]\| |
 | 摆杆转动惯量 | — | 独立函数 `calc_pendulum_inertia(m_p, L₀)`，按**细长杆绕端点旋转**模型，随虚拟腿长 L₀ 实时变化 | I_p = ⅓ · m_p · L₀² |
