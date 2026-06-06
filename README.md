@@ -39,7 +39,7 @@ wheel_bipedal_robot/
 
 ## 环境依赖
 
-本项目基于 **Python 3.12+** 开发，系统为 Ubuntu 22.04。运行前请安装以下依赖：
+本项目基于 **Python 3.10.12+** 开发，系统为 Ubuntu 22.04。运行前请安装以下依赖：
 
 ```bash
 pip install mujoco

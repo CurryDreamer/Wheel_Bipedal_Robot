@@ -1,16 +1,15 @@
-# 1. 忽略所有东西
 *
 
-# 2. 强制包含三个核心目录本身（允许 Git 进入这些目录）
+!images/
 !LQR_VMC/
 !robot_feedback_test/
 !robot_vmc_test/
 !README.md
+!cal_lqr_k.m
 
-# 3. 强制包含这三个目录下的所有子文件
+!images/**
 !LQR_VMC/**
 !robot_feedback_test/**
 !robot_vmc_test/**
 
-# 4. 确保 .gitignore 自己不会被忽略
 !.gitignore
