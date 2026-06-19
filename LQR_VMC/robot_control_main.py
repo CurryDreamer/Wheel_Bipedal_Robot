@@ -165,6 +165,14 @@ if __name__ == "__main__":
     roll_balancer = RollLegController(kp=1.0, ki=0.0, kd=0.0, max_out=0.14, min_leg=0.10, max_leg=0.14)
     
     with mujoco.viewer.launch_passive(m, d) as viewer:
+        # 相机追踪 torso
+        viewer.cam.type = mujoco.mjtCamera.mjCAMERA_TRACKING
+        viewer.cam.trackbodyid = m.body('torso').id
+        viewer.cam.distance = 1.5
+        viewer.cam.elevation = -20
+        viewer.cam.azimuth = 20
+        viewer.cam.lookat = [0, 0, 0.1]
+
         while viewer.is_running():
             step_start = time.time()
             
