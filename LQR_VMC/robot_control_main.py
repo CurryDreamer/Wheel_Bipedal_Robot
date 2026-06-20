@@ -170,12 +170,12 @@ if __name__ == "__main__":
         viewer.cam.trackbodyid = m.body('torso').id
         viewer.cam.distance = 1.5
         viewer.cam.elevation = -20
-        viewer.cam.azimuth = 20
+        viewer.cam.azimuth = 60
         viewer.cam.lookat = [0, 0, 0.1]
 
         while viewer.is_running():
             step_start = time.time()
-            
+            # 最外层：遥控器
             teleop.update(
                 current_v=current_v, 
                 target_length_left=target_length_left, 
@@ -193,15 +193,14 @@ if __name__ == "__main__":
 
             # 获取统一传感器信息
             info = robot_info_update(d)
-            
+
+            roll = -info['euler']['roll'] 
             pitch = -info['euler']['pitch']
-            yaw = info['euler']['yaw']
-            roll = -info['euler']['roll']
-            
+            yaw = info['euler']['yaw'] 
+
+            gyro_roll = -info['gyro_roll']
             gyro_pitch = -info['gyro_pitch']
             gyro_yaw = info['gyro_yaw']  
-            gyro_roll = -info['gyro_roll']
-            
             # 使用封装后的 Roll 平衡控制器
             target_length_left, target_length_right = roll_balancer.compute_leg_lengths(
                 current_roll=roll,
