@@ -12,6 +12,13 @@ class five_links_param:
         # fixed link
         self.l_5 = 0.08
         self.dt = dt
+        # 上一帧状态量缓存（用于差分求导），首帧用 None 标记未初始化
+        self.last_L_0 = None
+        self.last_phi_0 = None
+        self.last_alpha = None
+        self.d_L_0 = 0.0
+        self.d_phi_0 = 0.0
+        self.d_alpha = 0.0
     def forward_kinematics_cal(self, leg_flag,motor1_angle, motor2_angle, pitch, gyro_pitch):
         # 1. 角度量纲转换与零点调整 (确保 motor_angle 单位是 rad)
         if leg_flag == 0: # right
@@ -49,28 +56,33 @@ class five_links_param:
 
         # 计算虚拟腿长 L_0 和相对角度 phi_0
         self.L_0 = math.sqrt((self.x_C - self.l_5 / 2.0)**2 + self.y_C**2)
-        self.last_L_0 = self.L_0
-        self.d_L_0 = (self.L_0 - self.last_L_0) / self.dt
+        self.phi_0 = math.atan2(self.y_C, (self.x_C - self.l_5 / 2.0))
+        # 相对角度 alpha：摆杆相对于机体垂直线的偏角（顺时针为正）
+        self.alpha = math.pi / 2.0 - self.phi_0
 
-        self.phi_0 = math.atan2(self.y_C, (self.x_C - self.l_5 / 2.0)) 
-        self.last_phi_0 = self.phi_0
-        # 使用传入的 dt 计算微分，避免硬编码
-        if self.dt > 0.0:
+        # 4. 差分求导：用上一帧缓存值计算，再更新缓存（避免同帧自减恒为 0 的 bug）
+        if self.dt > 0.0 and self.last_L_0 is not None:
+            self.d_L_0 = (self.L_0 - self.last_L_0) / self.dt
             self.d_phi_0 = (self.phi_0 - self.last_phi_0) / self.dt
+            self.d_alpha = (self.alpha - self.last_alpha) / self.dt
         else:
+            # 首帧无历史，导数置零
+            self.d_L_0 = 0.0
             self.d_phi_0 = 0.0
-            
-        # 4. 状态变量解算（修正单位及正负号对齐）
+            self.d_alpha = 0.0
+        self.last_L_0 = self.L_0
+        self.last_phi_0 = self.phi_0
+        self.last_alpha = self.alpha
+
+        # 5. 状态变量解算（修正单位及正负号对齐）
         # 转换陀螺仪单位为 rad/s，此处直接使用传入的 gyro_pitch
         gyro_rad = gyro_pitch
 
-        # 相对角度 alpha：摆杆相对于机体垂直线的偏角（顺时针为正）
-        self.alpha = math.pi / 2.0 - self.phi_0
-        self.last_alpha = self.alpha
-        self.d_alpha = (self.alpha - self.last_alpha) / self.dt
-
         self.theta = self.alpha -  pitch
-        self.d_theta = -self.d_phi_0 - gyro_rad
+        # d_theta 仅取 IMU 陀螺仪（平滑），与原控制器一致：
+        # d_phi_0 是对运动学角的逐帧数值微分，dt≈1ms 下会放大高频噪声导致髋关节抖动，
+        # 故不并入 d_theta。d_phi_0/d_L_0/d_alpha 的差分仍保留供离地检测等使用。
+        self.d_theta = -gyro_rad
         
     def VMC_torque_cal(self, F_0, T_p):
         # 根据五连杆雅可比矩阵将极坐标力 [F_0, T_p] 转换到关节空间力矩 [T1, T2] 髋关节
@@ -95,5 +107,31 @@ class five_links_param:
         
         # 符号适配 (如果不同侧电机安装相反则做对应反转)
         return T1, T2
+
+    def inverse_VMC_torque_cal(self, T1, T2):
+        """逆 VMC: 由关节力矩 [T1, T2] 反算虚拟力 [F, T_p]
+        :param T1: 髋关节电机1的实际力矩反馈 (N·m)
+        :param T2: 髋关节电机2的实际力矩反馈 (N·m)
+        :return: F (虚拟轴向力), T_p (虚拟劈叉力矩)
+        """
+        denom = math.sin(self.phi_3 - self.phi_2)
+        if math.isclose(denom, 0.0, abs_tol=1e-6):
+            denom = 1e-6 * (1 if denom >= 0 else -1)
+
+        L0_safe = self.L_0 if self.L_0 > 1e-6 else 1e-6
+
+        J11 = (self.l_1 * math.sin(self.phi_0 - self.phi_3) * math.sin(self.phi_1 - self.phi_2)) / denom
+        J12 = (self.l_1 * math.cos(self.phi_0 - self.phi_3) * math.sin(self.phi_1 - self.phi_2)) / (L0_safe * denom)
+        J21 = (self.l_4 * math.sin(self.phi_0 - self.phi_2) * math.sin(self.phi_3 - self.phi_4)) / denom
+        J22 = (self.l_4 * math.cos(self.phi_0 - self.phi_2) * math.sin(self.phi_3 - self.phi_4)) / (L0_safe * denom)
+
+        det = J11 * J22 - J12 * J21
+        if math.isclose(det, 0.0, abs_tol=1e-9):
+            return 0.0, 0.0
+
+        F = (J22 * T1 - J12 * T2) / det
+        T_p = (-J21 * T1 + J11 * T2) / det
+
+        return F, T_p
 
 

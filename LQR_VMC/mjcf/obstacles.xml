@@ -5,6 +5,36 @@
     </asset>
 
     <worldbody>
+        <body name="up" pos="1.0 1.5 0.0" euler="3.14 0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="up" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+        <body name="mid" pos="2.0 1.5 0.08">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="mid" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
+        <body name="down" pos="3 1.5 0.0" euler="3.14 -0.15722222 0">
+            <!-- 
+                size 里的三个数分别是: [半长, 半宽, 半厚度] 
+                这里把厚度设得很薄 (0.02)，长宽设大，它就像一块可以任意倾斜的木板斜坡
+            -->
+            <geom name="down" 
+                  type="box" 
+                  size="0.5 0.5 0.02" 
+                  material="ramp_mat" />
+        </body>
         <!-- 
             【调节核心】修改 euler 的第二个参数（即围绕 Y 轴旋转），就能改变斜坡角度
             比如: "0 15 0" 代表坡度为 15 度，"0 30 0" 代表 30 度

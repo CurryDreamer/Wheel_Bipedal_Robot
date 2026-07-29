@@ -17,9 +17,9 @@
     </body> -->
     <body name="torso" pos="0.0 0.0 0.25">
       <freejoint />
-      <body name="tail" pos="-0.05 0.0 0.0">
+      <!-- <body name="tail" pos="-0.05 0.0 0.0">
         <geom type="cylinder"  name="tail1" mass="0.005" size="0.01 0.01 0.01" rgba="0 1 0 1" group="0" condim="3"/>  
-      </body>
+      </body> -->
       <site name="imu"  type="box" pos="0 0 -0.02" size="0.005 0.005 0.005"/>
       <geom name="torso_base" type="box" mass="0.823" pos="0 0 -0.03" size="0.068 0.0875 0.005" rgba="1 1 1 0.4" />
       <geom name="torso_front" type="box" mass="0.824" pos="0.0 0.0825 0.005" size="0.068 0.005 0.03" rgba="1 1 1 0.4" />
