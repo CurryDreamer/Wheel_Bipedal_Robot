@@ -39,9 +39,19 @@ def robot_info_update(d):
     
     info['euler'] = {'roll': roll, 'pitch': pitch, 'yaw': yaw}
     
-    # 3. 读取 y 轴陀螺仪 (Pitch 相对应的角速度)
-    info['gyro_yaw'] = d.sensor("angular_vel").data[0]
+    # 3. 读取 y 轴陀螺仪 (Pitch 相对应的角速度)、
+    info['gyro_roll'] = d.sensor("angular_vel").data[0]
     info['gyro_pitch'] = d.sensor("angular_vel").data[1]
-    info['gyro_roll'] = d.sensor("angular_vel").data[2]
+    info['gyro_yaw'] = d.sensor("angular_vel").data[2]
+
+    # 4. 读取六个电机实际力矩反馈 (actuator_force 索引与 XML actuator 顺序一致)
+    info['trq'] = {
+        'right1': d.actuator_force[0],      # right_phi1
+        'right2': d.actuator_force[1],      # right_phi4
+        'rightwheel': d.actuator_force[4],  # right_torque
+        'left1': d.actuator_force[2],       # left_phi1
+        'left2': d.actuator_force[3],       # left_phi4
+        'leftwheel': d.actuator_force[5],   # left_torque
+    }
 
     return info

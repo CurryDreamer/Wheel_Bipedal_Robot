@@ -13,3 +13,27 @@
 !robot_vmc_test/**
 
 !.gitignore
+
+# --- Re-exclude generated / editor / local junk (whitelist above re-includes them) ---
+# Python bytecode caches
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Runtime logs
+LQR_VMC/log/
+**/log/
+*.log
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Local Claude config — never upload
+.claude/
+**/.claude/
+
+# OS files
+.DS_Store
+Thumbs.db

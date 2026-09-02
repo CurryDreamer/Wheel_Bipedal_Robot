@@ -67,9 +67,9 @@ class PygameController:
             self.target_v = 0.0
             
         if keys_pressed[pygame.K_LEFT]:
-            self.target_w = 2.0  
+            self.target_w = 4.0  
         elif keys_pressed[pygame.K_RIGHT]:
-            self.target_w = -2.0
+            self.target_w = -4.0
         else:
             self.target_w = 0.0
             
