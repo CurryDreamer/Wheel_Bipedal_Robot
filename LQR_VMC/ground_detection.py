@@ -94,5 +94,4 @@ def detect_leg_ground_status(five_links, F, T_p) -> int:
     FN = (F * math.cos(five_links.theta)
           + T_p * math.sin(five_links.theta) / five_links.L_0
           + LEG_SUPPORT_WEIGHT)
-    print(FN)
     return 1 if FN < GROUND_FN_LOW else 0

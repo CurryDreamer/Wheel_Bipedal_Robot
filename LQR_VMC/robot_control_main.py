@@ -5,6 +5,7 @@ import mujoco.viewer
 import numpy as np
 import os
 import csv
+import atexit
 from datetime import datetime
 
 from robot_mujoco_sensor_feedback.robot_info_update import robot_info_update
@@ -273,6 +274,15 @@ if __name__ == "__main__":
     ])
     log_frame = 0
     print(f"[LOG] 离地检测日志: {log_path}")
+
+    # 兜底：Ctrl+C 或异常退出时 with 块下方的显式 flush/close 不会执行，
+    # 靠 atexit 保证日志一定落盘、句柄一定关闭；正常退出路径已提前 close，这里判空跳过。
+    def _flush_close_log():
+        if not log_file.closed:
+            log_file.flush()
+            log_file.close()
+            print(f"[LOG] 已保存离地检测日志（共 {log_frame} 帧）: {log_path}")
+    atexit.register(_flush_close_log)
 
     with mujoco.viewer.launch_passive(m, d) as viewer:
         # 相机追踪 torso
